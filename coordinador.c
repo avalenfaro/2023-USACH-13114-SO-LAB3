@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2023
  *
  */
-
+#define _XOPEN_SOURCE 600 /* Or higher */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -27,6 +27,8 @@
 // Variables Globales
 FILE *fp;
 Coordinador *c;
+
+//! NO EXISTE EN MAC
 pthread_barrier_t barrera;
 
 /**
@@ -182,20 +184,20 @@ void *thread(void *i)
 {
   int thread_n = (int)i;
   printf("%d", thread_n);
-  // int chunk = c->total_lineas / i;
-  // int start = 0;
-  // int end = chunk - 1;
-  // int thread_idx = 0;
+  int chunk = c->total_lineas / thread_n;
+  int start = 0;
+  int end = chunk - 1;
+  int thread_idx = 0;
 
-  // Vehiculo vehiculos[chunk];
+  Vehiculo vehiculos[chunk];
 
-  // for (int i = 0; i < *thread_n; i++)
-  // {
-  //   thread_idx = 0;
-  //   read_lines(vehiculos, start, end);
-  //   start += chunk;
-  //   end += chunk;
-  // }
+  for (int i = 0; i < thread_n; i++)
+  {
+    thread_idx = 0;
+    read_lines(vehiculos, start, end);
+    start += chunk;
+    end += chunk;
+  }
   pthread_exit(NULL);
 }
 
